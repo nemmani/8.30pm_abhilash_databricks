@@ -1,0 +1,58 @@
+create table CreditScore
+(
+Credit_ID int,
+Card_Type nvarchar(50),
+Credit_Name nvarchar(50),
+Credit_score int
+)
+
+
+
+insert into CreditScore values(1,'visa','cloudfreak',978)
+insert into CreditScore values(2,'visa','rama',	1240)
+insert into CreditScore values(3,'visa','krishna',	1140)
+insert into CreditScore values(4,'visa','sai',770)
+insert into CreditScore values(5,'visa','sai',770)
+insert into CreditScore values(6,'visa','srinu',	1240)
+insert into CreditScore values(7,'visa','srinu',	1240)
+insert into CreditScore values(8,'visa','siva',1140)
+insert into CreditScore values(9,'visa','siva',1140)
+
+insert into CreditScore values(1,'master','cloudfreak',978)
+insert into CreditScore values(2,	'master'	,'rama'	,770)
+insert into CreditScore values(3,	'master'	,'krishna',	1140)
+insert into CreditScore values(4,	'master'	,'sai	',1240)
+insert into CreditScore values(5,	'master'	,'sai	',1240)
+insert into CreditScore values(6,	'master'	,'srinu	',1240)
+insert into CreditScore values(7,	'master'	,'srinu	',1240)
+insert into CreditScore values(8,	'master'	,'siva	',1140)
+insert into CreditScore values(9,	'master'	,'siva	',1140)
+
+WITH CTE AS (
+    SELECT 
+        Credit_ID,Card_Type, Credit_Name, Credit_score,
+        ROW_NUMBER() OVER 
+		(PARTITION BY Card_Type, Credit_Name, Credit_score ORDER BY Credit_ID) AS Rownumber
+    FROM CreditScore
+)select * from CTE 
+
+WITH CTE AS (
+    SELECT 
+        Credit_ID,
+        ROW_NUMBER() OVER (PARTITION BY Card_Type, Credit_Name, Credit_score ORDER BY Credit_ID) AS Rownumber
+    FROM CreditScore
+)
+DELETE FROM CreditScore
+WHERE Credit_ID IN (
+    SELECT Credit_ID
+    FROM CTE
+    WHERE Rownumber > 1
+);
+
+WITH CLOUDFREAKCTE AS(
+select *,ROW_NUMBER() OVER(PARTITION BY Card_Type ORDER BY Credit_score desc) AS Rownumber,
+rank() OVER(PARTITION BY Card_Type ORDER BY Credit_score desc) AS Ranknumber,
+dense_rank() OVER(PARTITION BY Card_Type ORDER BY Credit_score desc) AS Dense_rank
+
+from CreditScore)
+select * from CLOUDFREAKCTE
