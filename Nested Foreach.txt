@@ -1,0 +1,17 @@
+Nested Foreach:
+--------------
+1. By default ADF wont support nested foreach
+
+2. approach is master & child pipelines process
+
+3. Master pipeline intention is take care of only folders
+
+4. child pipeline intention is take care of only files
+
+5. we need to call child pipeline into master pipeline by using execute pipeline activity
+
+6. Here there is a concept called pipeline parameter this pipeline parameter intention is provide the
+
+ master pipelines folders information to pass child pipeline and child pipeline files information to pass master pipeline
+
+7. create pipeline parameter in child pipeline
